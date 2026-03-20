@@ -1,12 +1,12 @@
 services:
 
-  app:
-    build: .
+  app-sql:
+    image: ghcr.io/Atharva-Phatak/object-detection:latest
     command: >
       sh -c "alembic upgrade head &&
              python -m counter.entrypoints.webapp"
     ports:
-      - "5000:5000"
+      - "5001:5000"
     environment:
       - PYTHONPATH=.
       - ENV=sql
@@ -16,12 +16,29 @@ services:
       - MYSQL_PORT=3306
       - MYSQL_DB=object_counts
     depends_on:
-      mongo:
-        condition: service_healthy
       mysql:
         condition: service_healthy
       tfserving:
         condition: service_started
+    profiles: ["sql"]
+
+  app-prod:
+    build: .
+    command: python -m counter.entrypoints.webapp
+    ports:
+      - "5001:5000"
+    environment:
+      - PYTHONPATH=.
+      - ENV=prod
+      - MONGO_HOST=mongo
+      - MONGO_PORT=27017
+      - MONGO_DB=prod_counter
+    depends_on:
+      mongo:
+        condition: service_healthy
+      tfserving:
+        condition: service_started
+    profiles: ["prod"]
 
   tfserving:
     image: tensorflow/serving
@@ -43,6 +60,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    profiles: ["prod"]
 
   mysql:
     image: mysql:8.0
@@ -60,6 +78,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    profiles: ["sql"]
 
 volumes:
   mongo_data:
