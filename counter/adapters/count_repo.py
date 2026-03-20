@@ -56,7 +56,11 @@ class CountMongoDBRepo(ObjectCountRepo):
         counters = counter_col.find(query)
         object_counts = []
         for counter in counters:
-            object_counts.append(ObjectCount(counter["object_class"], counter["count"]))
+            object_counts.append(
+                ObjectCount(
+                    object_class=counter["object_class"], count=counter["count"]
+                )
+            )
         return object_counts
 
     def update_values(self, new_values: List[ObjectCount]):
@@ -99,7 +103,10 @@ class SQLObjectCountRepo(ObjectCountRepo):
             query = session.query(ObjectCountRecord)
             if object_classes:
                 query = query.filter(ObjectCountRecord.object_class.in_(object_classes))
-            return [ObjectCount(r.object_class, r.count) for r in query.all()]
+            return [
+                ObjectCount(object_class=r.object_class, count=r.count)
+                for r in query.all()
+            ]
 
     def update_values(self, new_values: List[ObjectCount]):
         with self.__get_session() as session:

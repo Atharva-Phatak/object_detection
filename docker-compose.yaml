@@ -1,7 +1,8 @@
 services:
 
   app-sql:
-    image: ghcr.io/Atharva-Phatak/object-detection:latest
+    image: ghcr.io/atharva-Phatak/object-detection:latest
+    pull_policy: always
     command: >
       sh -c "alembic upgrade head &&
              python -m counter.entrypoints.webapp"
@@ -15,6 +16,8 @@ services:
       - MYSQL_HOST=mysql
       - MYSQL_PORT=3306
       - MYSQL_DB=object_counts
+      - TFS_HOST=tfserving
+      - TFS_PORT=8501
     depends_on:
       mysql:
         condition: service_healthy
@@ -23,8 +26,8 @@ services:
     profiles: ["sql"]
 
   app-prod:
-    build: .
-    command: python -m counter.entrypoints.webapp
+    image: ghcr.io/atharva-Phatak/object-detection:latest
+    pull_policy: always
     ports:
       - "5001:5000"
     environment:
@@ -33,6 +36,8 @@ services:
       - MONGO_HOST=mongo
       - MONGO_PORT=27017
       - MONGO_DB=prod_counter
+      - TFS_HOST=tfserving    # this was missing
+      - TFS_PORT=8501
     depends_on:
       mongo:
         condition: service_healthy
@@ -42,6 +47,7 @@ services:
 
   tfserving:
     image: tensorflow/serving
+    pull_policy: missing
     ports:
       - "8501:8501"
     volumes:
@@ -51,6 +57,7 @@ services:
 
   mongo:
     image: mongo:latest
+    pull_policy: missing
     ports:
       - "27017:27017"
     volumes:
@@ -64,6 +71,7 @@ services:
 
   mysql:
     image: mysql:8.0
+    pull_policy: missing
     ports:
       - "3306:3306"
     environment:
