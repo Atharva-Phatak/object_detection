@@ -7,6 +7,9 @@ from PIL import Image
 
 from counter.domain.models import Prediction, Box
 from counter.domain.ports import ObjectDetector
+from counter.helper.logger import setup_logger
+
+logger = setup_logger(__name__)
 
 
 class FakeObjectDetector(ObjectDetector):
@@ -30,7 +33,7 @@ class TFSObjectDetector(ObjectDetector):
     def predict(self, image: BinaryIO) -> List[Prediction]:
         np_image = self.__to_np_array(image)
         predict_request = '{"instances" : %s}' % np.expand_dims(np_image, 0).tolist()
-        print(f"Sending request to TFS...{self.url}")
+        logger.info(f"Sending request to TFS...{self.url}")
         response = requests.post(self.url, data=predict_request)
         predictions = response.json()["predictions"][0]
         return self.__raw_predictions_to_domain(predictions)
@@ -52,7 +55,7 @@ class TFSObjectDetector(ObjectDetector):
         )
 
     def __raw_predictions_to_domain(self, raw_predictions: dict) -> List[Prediction]:
-        print("Parsing raw predictions...")
+        logger.info("Parsing raw predictions...")
         num_detections = int(raw_predictions.get("num_detections"))
         predictions = []
         for i in range(0, num_detections):
@@ -69,5 +72,5 @@ class TFSObjectDetector(ObjectDetector):
             predictions.append(
                 Prediction(class_name=class_name, score=detection_score, box=box)
             )
-        print(predictions)
+        logger.info(predictions)
         return predictions

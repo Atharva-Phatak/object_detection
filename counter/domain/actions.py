@@ -4,23 +4,26 @@ from counter.debug import draw
 from counter.domain.models import CountResponse, Prediction
 from counter.domain.ports import ObjectDetector, ObjectCountRepo
 from counter.domain.predictions import over_threshold, count
+from typing import BinaryIO
 
 
 class CountDetectedObjects:
     def __init__(
-        self, object_detector: ObjectDetector, object_count_repo: ObjectCountRepo
+        self,
+        object_detector: ObjectDetector,
+        object_count_repo: ObjectCountRepo | None = None,
     ):
         self.__object_detector = object_detector
         self.__object_count_repo = object_count_repo
 
-    def execute(self, image, threshold) -> CountResponse:
+    def execute(self, image: BinaryIO, threshold: float) -> CountResponse:
         predictions = self.__find_valid_predictions(image, threshold)
         object_counts = count(predictions)
         self.__object_count_repo.update_values(object_counts)
         total_objects = self.__object_count_repo.read_values()
         return CountResponse(current_objects=object_counts, total_objects=total_objects)
 
-    def __find_valid_predictions(self, image, threshold):
+    def __find_valid_predictions(self, image: BinaryIO, threshold: float):
         predictions = self.__object_detector.predict(image)
         self.__debug_image(image, predictions, "all_predictions.jpg")
         valid_predictions = list(over_threshold(predictions, threshold=threshold))
@@ -31,7 +34,7 @@ class CountDetectedObjects:
         )
         return valid_predictions
 
-    def find_predictions(self, image, threshold) -> list[Prediction]:
+    def find_predictions(self, image: BinaryIO, threshold: float) -> list[Prediction]:
         return self.__find_valid_predictions(image, threshold)
 
     @staticmethod

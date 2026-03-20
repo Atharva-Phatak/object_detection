@@ -65,7 +65,7 @@ class CountMongoDBRepo(ObjectCountRepo):
 
 
 class SQLObjectCountRepo(ObjectCountRepo):
-    def __init__(self, host: str, port: str, database: str):
+    def __init__(self, host: str, port: int, database: str):
         url = URL.create(
             drivername="mysql+pymysql",
             username=os.getenv("DB_USER"),  # Ideally use a secret manager

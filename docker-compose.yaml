@@ -1,0 +1,66 @@
+services:
+
+  app:
+    build: .
+    command: >
+      sh -c "alembic upgrade head &&
+             python -m counter.entrypoints.webapp"
+    ports:
+      - "5000:5000"
+    environment:
+      - PYTHONPATH=.
+      - ENV=sql
+      - DB_USER=${DB_USER:-counter}
+      - DB_PASSWORD=${DB_PASSWORD:-secret}
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DB=object_counts
+    depends_on:
+      mongo:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+      tfserving:
+        condition: service_started
+
+  tfserving:
+    image: tensorflow/serving
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./tmp/model:/models
+    environment:
+      - MODEL_NAME=ssd_mobilenet_v2
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-secret}
+      - MYSQL_DATABASE=object_counts
+      - MYSQL_USER=${DB_USER:-counter}
+      - MYSQL_PASSWORD=${DB_PASSWORD:-secret}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mongo_data:
+  mysql_data:
