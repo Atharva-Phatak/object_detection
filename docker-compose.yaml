@@ -1,7 +1,7 @@
 services:
 
   app-sql:
-    image: ghcr.io/atharva-Phatak/object-detection:latest
+    image: ghcr.io/atharva-phatak/object-detection:latest
     pull_policy: always
     command: >
       sh -c "alembic upgrade head &&
@@ -26,7 +26,7 @@ services:
     profiles: ["sql"]
 
   app-prod:
-    image: ghcr.io/atharva-Phatak/object-detection:latest
+    image: ghcr.io/atharva-phatak/object-detection:latest
     pull_policy: always
     ports:
       - "5001:5000"
