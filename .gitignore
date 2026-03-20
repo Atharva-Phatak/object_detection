@@ -5,3 +5,4 @@ spikes
 *.pyc
 /tmp
 .ruff_cache
+.env
