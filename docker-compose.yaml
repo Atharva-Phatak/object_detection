@@ -46,8 +46,8 @@ services:
     profiles: ["prod"]
 
   tfserving:
-    image: tensorflow/serving
-    pull_policy: missing
+    image: tensorflow/serving:latest
+    pull_policy: if_not_present
     ports:
       - "8501:8501"
     volumes:
@@ -57,7 +57,7 @@ services:
 
   mongo:
     image: mongo:latest
-    pull_policy: missing
+    pull_policy: if_not_present
     ports:
       - "27017:27017"
     volumes:
@@ -71,14 +71,14 @@ services:
 
   mysql:
     image: mysql:8.0
-    pull_policy: missing
+    pull_policy: if_not_present
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-secret}
-      - MYSQL_DATABASE=object_counts
-      - MYSQL_USER=${DB_USER:-counter}
-      - MYSQL_PASSWORD=${DB_PASSWORD:-secret}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DB}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:

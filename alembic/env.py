@@ -3,19 +3,24 @@ from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config, pool
 from sqlalchemy.engine import URL
-
 from alembic import context
 from counter.adapters.sql_models import Base
 
 config = context.config
+
+db_user = os.getenv("DB_USER")
+db_password = os.getenv("DB_PASSWORD")
+
+if not db_user or not db_password:
+    raise ValueError("DB_USER and DB_PASSWORD environment variables must be set")
 
 config.set_main_option(
     "sqlalchemy.url",
     str(
         URL.create(
             drivername="mysql+pymysql",
-            username=os.getenv("DB_USER"),
-            password=os.getenv("DB_PASSWORD"),
+            username=db_user,
+            password=db_password,
             host=os.getenv("MYSQL_HOST", "localhost"),
             port=int(os.getenv("MYSQL_PORT", 3306)),
             database=os.getenv("MYSQL_DB", "object_counts"),
