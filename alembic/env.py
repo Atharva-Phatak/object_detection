@@ -30,7 +30,8 @@ config.set_main_option(
 
 target_metadata = Base.metadata
 
-fileConfig(config.config_file_name)
+if config.config_file_name is not None:
+    fileConfig(config.config_file_name)
 
 
 def run_migrations_online():

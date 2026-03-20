@@ -71,7 +71,10 @@ services:
 
   mysql:
     image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
     pull_policy: if_not_present
+    env_file:
+      - .env
     ports:
       - "3306:3306"
     environment:
@@ -86,7 +89,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    profiles: ["sql"]
+    profiles: ["sql", "test"]
 
   test:
     image: ghcr.io/<your-github-username>/object-detection:latest
