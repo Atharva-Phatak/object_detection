@@ -1,10 +1,11 @@
+from typing import BinaryIO
+
 from PIL import Image
 
 from counter.debug import draw
 from counter.domain.models import CountResponse, Prediction
-from counter.domain.ports import ObjectDetector, ObjectCountRepo
-from counter.domain.predictions import over_threshold, count
-from typing import BinaryIO
+from counter.domain.ports import ObjectCountRepo, ObjectDetector
+from counter.domain.predictions import count, over_threshold
 
 
 class CountDetectedObjects:

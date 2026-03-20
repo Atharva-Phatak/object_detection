@@ -1,9 +1,9 @@
 import io
 import json
+from pathlib import Path
 
 import pytest
 
-from pathlib import Path
 from counter.entrypoints.webapp import create_app
 
 

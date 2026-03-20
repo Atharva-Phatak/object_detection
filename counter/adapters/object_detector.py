@@ -1,11 +1,11 @@
 import json
-from typing import List, BinaryIO
+from typing import BinaryIO, List
 
 import numpy as np
 import requests
 from PIL import Image
 
-from counter.domain.models import Prediction, Box
+from counter.domain.models import Box, Prediction
 from counter.domain.ports import ObjectDetector
 from counter.helper.logger import setup_logger
 

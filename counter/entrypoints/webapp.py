@@ -1,7 +1,7 @@
 from http import HTTPStatus
 from io import BytesIO
 
-from flask import Flask, request, jsonify
+from flask import Flask, jsonify, request
 
 from counter import config
 
