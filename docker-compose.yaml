@@ -80,6 +80,27 @@ services:
       retries: 5
     profiles: ["sql"]
 
+  test:
+    image: ghcr.io/<your-github-username>/object-detection:latest
+    command: >
+      sh -c "uv run pytest -m integration --cov=counter --cov-report=term-missing"
+    environment:
+      - PYTHONPATH=.
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DB=object_counts
+      - DB_USER=${DB_USER:-counter}
+      - DB_PASSWORD=${DB_PASSWORD:-secret}
+      - MONGO_HOST=mongo
+      - MONGO_PORT=27017
+      - MONGO_DB=test_counter
+    depends_on:
+      mysql:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    profiles: ["test"]
+
 volumes:
   mongo_data:
   mysql_data:

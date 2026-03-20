@@ -22,22 +22,28 @@ class TestCountDetectedObjects:
 
     @pytest.fixture
     def count_object_repo(self) -> Mock:
-        return Mock()
+        repo = Mock()
+        repo.read_values.return_value = []
+        return repo
 
     def test_count_valid_predictions(self, object_detector, count_object_repo) -> None:
         response = CountDetectedObjects(object_detector, count_object_repo).execute(
             None, 0.5
         )
         assert sorted(response.current_objects, key=lambda x: x.object_class) == [
-            ObjectCount("cat", 2),
-            ObjectCount("dog", 1),
-            ObjectCount("rabbit", 1),
+            ObjectCount(object_class="cat", count=2),
+            ObjectCount(object_class="dog", count=1),
+            ObjectCount(object_class="rabbit", count=1),
         ]
 
     def test_update_count_object_repo(self, object_detector, count_object_repo):
         CountDetectedObjects(object_detector, count_object_repo).execute(None, 0)
         count_object_repo.update_values.assert_called_with(
-            [ObjectCount("cat", 2), ObjectCount("dog", 2), ObjectCount("rabbit", 1)]
+            [
+                ObjectCount(object_class="cat", count=2),
+                ObjectCount(object_class="dog", count=2),
+                ObjectCount(object_class="rabbit", count=1),
+            ]
         )
 
     def test_find_predictions_over_threshold(self, object_detector, count_object_repo):

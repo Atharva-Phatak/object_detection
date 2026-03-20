@@ -13,10 +13,26 @@ dependencies = [
     "sqlalchemy>=2.0.48",
     "pydantic>=2.12.5",
     "alembic>=1.18.4",
+    "pymysql>=1.1.2",
+    "cryptography>=46.0.5",
 ]
 [dependency-groups]
 dev = [
     "ruff>=0.15.7",
     "pre-commit>=4.0.0",
     "pytest==8.4.1",
+    "pytest-cov>=7.0.0",
 ]
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = ["integration: marks tests as integration tests (deselect with '-m not integration')"]
+addopts = "-m 'not integration'"  # skip integration tests by default
+
+[tool.coverage.run]
+source = ["counter"]
+omit = ["tests/*"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 70

@@ -22,7 +22,10 @@ clean:
 	docker compose down -v  # removes volumes too
 
 test:
-	uv run pytest
+	uv run pytest --cov=counter --cov-report=term-missing
+
+test-integration:
+	docker compose --profile test --profile sql --profile prod up --abort-on-container-exit --exit-code-from test
 
 lint:
 	uv run ruff check .
