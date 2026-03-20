@@ -82,6 +82,7 @@ class SQLObjectCountRepo(ObjectCountRepo):
             host=host,
             port=port,
             database=database,
+            query={"auth_plugin_map": "mysql_native_password"},
         )
         self.__engine = create_engine(url)
         self.__session_factory = sessionmaker(bind=self.__engine)

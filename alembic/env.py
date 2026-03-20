@@ -24,7 +24,7 @@ config.set_main_option(
             host=os.getenv("MYSQL_HOST", "localhost"),
             port=int(os.getenv("MYSQL_PORT", 3306)),
             database=os.getenv("MYSQL_DB", "object_counts"),
-            query={"auth_plugin": "mysql_native_password"},
+            query={"auth_plugin_map": "mysql_native_password"},
         )
     ),
 )
