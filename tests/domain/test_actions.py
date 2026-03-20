@@ -47,20 +47,10 @@ class TestCountDetectedObjects:
         )
 
     def test_find_predictions_over_threshold(self, object_detector, count_object_repo):
-        response = CountDetectedObjects(
-            object_detector, count_object_repo
-        ).find_predictions(None, 0.5)
+        response = CountDetectedObjects(object_detector).find_predictions(None, 0.5)
         assert response == [
             generate_prediction("cat", 0.9),
             generate_prediction("cat", 0.8),
             generate_prediction("dog", 0.8),
             generate_prediction("rabbit", 0.9),
         ]
-
-    def test_find_predictions_does_not_update_repo(
-        self, object_detector, count_object_repo
-    ):
-        CountDetectedObjects(object_detector, count_object_repo).find_predictions(
-            None, 0.5
-        )
-        count_object_repo.update_values.assert_not_called()

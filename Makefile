@@ -19,7 +19,7 @@ stop:
 	docker compose down
 
 clean:
-	docker compose down -v  # removes volumes too
+	docker compose --profile sql --profile prod --profile test down -v
 
 test:
 	uv run pytest --cov=counter --cov-report=term-missing
