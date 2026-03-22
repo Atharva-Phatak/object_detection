@@ -5,7 +5,7 @@ services:
     volumes:
       - ./tmp/model:/tmp/model
       - ./scripts:/scripts
-    profiles: ["sql", "prod", "test"]
+    profiles: ["sql", "prod"]
 
   app-sql:
     image: ghcr.io/atharva-phatak/object-detection:latest
@@ -64,6 +64,7 @@ services:
     depends_on:
       model-downloader:
         condition: service_completed_successfully
+    profiles: ["prod", "sql"]
 
   mongo:
     image: mongo:latest
