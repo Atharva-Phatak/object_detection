@@ -26,7 +26,7 @@ A new `SQLObjectCountRepo` adapter was added implementing `ObjectCountRepo` usin
 - Migrated dependency management from `requirements.txt` to `uv` with `pyproject.toml`
 - Replaced `dataclasses` with Pydantic `BaseModel` for automatic validation and serialization
 - Added proper input validation and error handling in Flask endpoints (400 for missing file, invalid threshold, invalid file type)
-- Replaced `__debug__` pattern with structured logging
+- Replaced `print` pattern with structured logging
 - Added pre-commit hooks with ruff for linting
 - Added `Dockerfile` using official uv image with intermediate caching layers and multi-platform builds (`amd64` + `arm64`)
 - Added `docker-compose.yaml` with profiles (`sql`, `prod`, `test`) so only relevant services start per environment
@@ -56,7 +56,7 @@ The hexagonal architecture makes adding new ML frameworks straightforward - only
 Copy the example .env.example file and fill in credentials:
 
 
-Install dependencies:
+Install dependencies: First install uv on your system and python of choice via uv.
 
 ```bash
 make setup
