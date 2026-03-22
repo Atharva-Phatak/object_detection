@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
 MODEL_DIR="tmp/model/ssd_mobilenet_v2/1"
@@ -8,6 +8,8 @@ if [ -f "$MODEL_DIR/saved_model.pb" ]; then
   echo "Model already exists at $MODEL_DIR, skipping download"
   exit 0
 fi
+
+apk add --no-cache curl tar
 
 echo "Creating model directory..."
 mkdir -p "$MODEL_DIR"

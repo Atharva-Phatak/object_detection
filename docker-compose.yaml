@@ -1,8 +1,7 @@
 services:
   model-downloader:
-    image: bash:latest
-    pull_policy: if_not_present
-    command: bash /scripts/download_models.sh
+    image: alpine:latest
+    command: sh /scripts/download_models.sh
     volumes:
       - ./tmp/model:/tmp/model
       - ./scripts:/scripts
