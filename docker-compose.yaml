@@ -90,7 +90,8 @@ services:
     profiles: ["sql", "test"]
 
   test:
-    image: ghcr.io/<your-github-username>/object-detection:latest
+    image: ghcr.io/atharva-phatak/object-detection:latest
+    pull_policy: always
     command: >
       sh -c "uv run pytest -m integration --cov=counter --cov-report=term-missing"
     environment:
