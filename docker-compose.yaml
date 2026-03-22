@@ -104,7 +104,7 @@ services:
     image: ghcr.io/atharva-phatak/object-detection:latest
     pull_policy: always
     command: >
-      sh -c "uv run pytest -m integration --cov=counter --cov-report=term-missing"
+      sh -c "sh -c "uv run pytest -m integration -v""
     environment:
       - PYTHONPATH=.
       - MYSQL_HOST=mysql
