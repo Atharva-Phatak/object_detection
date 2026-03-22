@@ -1,4 +1,12 @@
 services:
+  model-downloader:
+    image: bash:latest
+    pull_policy: if_not_present
+    command: bash /scripts/download_models.sh
+    volumes:
+      - ./tmp/model:/tmp/model
+      - ./scripts:/scripts
+    profiles: ["sql", "prod"]
 
   app-sql:
     image: ghcr.io/atharva-phatak/object-detection:latest
@@ -54,6 +62,9 @@ services:
       - ./tmp/model:/models
     environment:
       - MODEL_NAME=ssd_mobilenet_v2
+    depends_on:
+      model-downloader:
+        condition: service_completed_successfully
 
   mongo:
     image: mongo:latest

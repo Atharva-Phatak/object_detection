@@ -4,6 +4,11 @@ set -e
 MODEL_DIR="tmp/model/ssd_mobilenet_v2/1"
 MODEL_URL="http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v2_coco_2018_03_29.tar.gz"
 
+if [ -f "$MODEL_DIR/saved_model.pb" ]; then
+  echo "Model already exists at $MODEL_DIR, skipping download"
+  exit 0
+fi
+
 echo "Creating model directory..."
 mkdir -p "$MODEL_DIR"
 
