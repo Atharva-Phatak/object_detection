@@ -26,29 +26,29 @@ jobs:
       - name: Run unit tests
         run: uv run pytest --cov=counter --cov-report=term-missing
 
-  #integration-test:
-  #  needs: test
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #    - uses: actions/checkout@v4
+  integration-test:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-  #    - name: Run integration tests
-  #      env:
-  #        DB_USER: counter
-  #        DB_PASSWORD: secret
-  #        MYSQL_HOST: localhost
-  #        MYSQL_PORT: 3306
-  #        MYSQL_DB: object_counts
-  #        MONGO_HOST: localhost
-  #        MONGO_PORT: 27017
-  #        MONGO_DB: test_counter
-  #      run: |
-  #        docker compose --profile test up \
-  #          --abort-on-container-exit \
-  #          --exit-code-from test
+      - name: Run integration tests
+        env:
+          DB_USER: counter
+          DB_PASSWORD: secret
+          MYSQL_HOST: localhost
+          MYSQL_PORT: 3306
+          MYSQL_DB: object_counts
+          MONGO_HOST: localhost
+          MONGO_PORT: 27017
+          MONGO_DB: test_counter
+        run: |
+          docker compose --profile test up \
+            --abort-on-container-exit \
+            --exit-code-from test
 
   build:
-    #needs: integration-test
+    needs: integration-test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
