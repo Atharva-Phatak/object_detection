@@ -67,7 +67,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    profiles: ["prod"]
+    profiles: ["prod", "test"]
 
   mysql:
     image: mysql:8.0
