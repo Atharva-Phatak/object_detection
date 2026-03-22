@@ -103,8 +103,7 @@ services:
   test:
     image: ghcr.io/atharva-phatak/object-detection:latest
     pull_policy: always
-    command: >
-      sh -c "sh -c "uv run pytest -m integration -v""
+    command: ["uv", "run", "pytest", "-m", "integration", "-v"]
     environment:
       - PYTHONPATH=.
       - MYSQL_HOST=mysql
