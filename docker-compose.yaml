@@ -6,7 +6,7 @@ services:
     volumes:
       - ./tmp/model:/tmp/model
       - ./scripts:/scripts
-    profiles: ["sql", "prod"]
+    profiles: ["sql", "prod", "test"]
 
   app-sql:
     image: ghcr.io/atharva-phatak/object-detection:latest
