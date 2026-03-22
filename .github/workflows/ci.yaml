@@ -24,7 +24,7 @@ jobs:
         run: uv sync --group dev
 
       - name: Run unit tests
-        run: uv run pytest --cov=counter --cov-report=term-missing
+        run: uv run pytest --cov=counter --cov-report=term-missing --cov-fail-under=70
 
   integration-test:
     needs: test
